@@ -29,6 +29,8 @@ public class PropertyParser {
    * <p>
    *   The default value is {@code false} (indicate disable a default value on placeholder)
    *   If you specify the {@code true}, you can specify key and default value on placeholder (e.g. {@code ${db.username:postgres}}).
+   *
+   *   ！！！ spring配置文件中也有这样的默认值机制支持：${db.username:postgres}，postgres就是默认值，db.username是property key;
    * </p>
    * @since 3.4.2
    */
