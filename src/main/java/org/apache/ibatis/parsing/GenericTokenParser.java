@@ -30,6 +30,10 @@ public class GenericTokenParser {
     this.handler = handler;
   }
 
+  /**
+   * 比较基本的功能，只能简单分析和考虑了转义；
+   * 不像spring支持嵌套，当handler是org.apache.ibatis.parsing.PropertyParser.VariableTokenHandler时，支持默认值；
+   */
   public String parse(String text) {
     if (text == null || text.isEmpty()) {
       return "";
@@ -53,6 +57,8 @@ public class GenericTokenParser {
         if (expression == null) {
           expression = new StringBuilder();
         } else {
+          //将StringBuilder的count设置为0;这个count表示StringBuilder用到的底层char[] value字符数组的有效字符截止位置（不包含），即字符数组的[0,count)区间；
+          //setLength(0)表示用到的字符数量为0；
           expression.setLength(0);
         }
         builder.append(src, offset, start - offset);

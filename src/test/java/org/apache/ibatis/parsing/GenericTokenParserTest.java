@@ -16,6 +16,7 @@
 package org.apache.ibatis.parsing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -78,12 +79,14 @@ public class GenericTokenParserTest {
 
   @Test
   public void shallNotInterpolateSkippedVaiables() {
-    GenericTokenParser parser = new GenericTokenParser("${", "}", new VariableTokenHandler(new HashMap<>()));
+    GenericTokenParser parser = new GenericTokenParser("${", "}", new VariableTokenHandler(new HashMap(){{put("null","Nil");}}));
 
     assertEquals("${skipped} variable", parser.parse("\\${skipped} variable"));
     assertEquals("This is a ${skipped} variable", parser.parse("This is a \\${skipped} variable"));
     assertEquals("null ${skipped} variable", parser.parse("${skipped} \\${skipped} variable"));
     assertEquals("The null is ${skipped} variable", parser.parse("The ${skipped} is \\${skipped} variable"));
+    //可见不支持嵌套
+    assertNotEquals("Nil ${skipped} variable", parser.parse("${${skipped}} \\${skipped} variable"));
   }
 
   @Disabled("Because it randomly fails on Travis CI. It could be useful during development.")
