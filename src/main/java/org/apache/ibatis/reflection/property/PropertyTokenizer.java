@@ -21,10 +21,11 @@ import java.util.Iterator;
  * @author Clinton Begin
  */
 public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
-  private String name;
-  private final String indexedName;
-  private String index;
-  private final String children;
+  //假设有属性表达式orders[0].items[0].name
+  private String name; //当前位置属性名,orders
+  private final String indexedName;//当前可能附加索引的属性名,orders[0]
+  private String index;//当前属性附加的索引,0
+  private final String children;//当前indexedName后.后面部分,items[0].name
 
   public PropertyTokenizer(String fullname) {
     int delim = fullname.indexOf('.');
