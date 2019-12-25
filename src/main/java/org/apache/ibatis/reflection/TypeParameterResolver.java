@@ -45,7 +45,7 @@ public class TypeParameterResolver {
    *         they will be resolved to the actual runtime {@link Type}s.
    */
   public static Type resolveReturnType(Method method, Type srcType) {
-    Type returnType = method.getGenericReturnType();
+    Type returnType = method.getGenericReturnType();//这个returnType可能是一个具体的类对应Class,带类型参数的类Class<T>对应ParameterizedType,T对应TypeVariable,T[]对应GenericArrayType
     Class<?> declaringClass = method.getDeclaringClass();
     return resolveType(returnType, srcType, declaringClass);
   }
@@ -64,22 +64,36 @@ public class TypeParameterResolver {
     return result;
   }
 
+  /**
+   *
+   * @param type 可能是返回类型、参数类型、字段类型
+   * @param srcType  来源类类型
+   * @param declaringClass  声明type参数的类
+   * @return
+   */
   private static Type resolveType(Type type, Type srcType, Class<?> declaringClass) {
     if (type instanceof TypeVariable) {
       return resolveTypeVar((TypeVariable<?>) type, srcType, declaringClass);
     } else if (type instanceof ParameterizedType) {
       return resolveParameterizedType((ParameterizedType) type, srcType, declaringClass);
-    } else if (type instanceof GenericArrayType) {
+    } else if (type instanceof GenericArrayType) {//泛型数组，如： T[]
       return resolveGenericArrayType((GenericArrayType) type, srcType, declaringClass);
     } else {
       return type;
     }
   }
 
+  /**
+   *
+   * @param genericArrayType 泛型数组类型，如T[]
+   * @param srcType          来源类类型
+   * @param declaringClass   声明类
+   * @return
+   */
   private static Type resolveGenericArrayType(GenericArrayType genericArrayType, Type srcType, Class<?> declaringClass) {
     Type componentType = genericArrayType.getGenericComponentType();
     Type resolvedComponentType = null;
-    if (componentType instanceof TypeVariable) {
+    if (componentType instanceof TypeVariable) {//类型变量，比如：T
       resolvedComponentType = resolveTypeVar((TypeVariable<?>) componentType, srcType, declaringClass);
     } else if (componentType instanceof GenericArrayType) {
       resolvedComponentType = resolveGenericArrayType((GenericArrayType) componentType, srcType, declaringClass);
@@ -133,6 +147,13 @@ public class TypeParameterResolver {
     return result;
   }
 
+  /**
+   *
+   * @param typeVar 类型变量
+   * @param srcType 来源类类型
+   * @param declaringClass 声明类
+   * @return
+   */
   private static Type resolveTypeVar(TypeVariable<?> typeVar, Type srcType, Class<?> declaringClass) {
     Type result = null;
     Class<?> clazz = null;
@@ -169,8 +190,17 @@ public class TypeParameterResolver {
     return Object.class;
   }
 
+  /**
+   *
+   * @param typeVar 类型变量，如T ，可能是返回值，参数
+   * @param srcType 来源类类型
+   * @param declaringClass 声明此typeVar所在方法的声明类
+   * @param clazz   源类class
+   * @param superclass 父type
+   * @return
+   */
   private static Type scanSuperTypes(TypeVariable<?> typeVar, Type srcType, Class<?> declaringClass, Class<?> clazz, Type superclass) {
-    if (superclass instanceof ParameterizedType) {
+    if (superclass instanceof ParameterizedType) {//如Parent<String>  这种；
       ParameterizedType parentAsType = (ParameterizedType) superclass;
       Class<?> parentAsClass = (Class<?>) parentAsType.getRawType();
       TypeVariable<?>[] parentTypeVars = parentAsClass.getTypeParameters();
