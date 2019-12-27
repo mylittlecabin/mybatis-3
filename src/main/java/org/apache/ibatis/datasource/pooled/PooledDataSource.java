@@ -351,6 +351,9 @@ public class PooledDataSource implements DataSource {
       if (conn.isValid()) {
         if (state.idleConnections.size() < poolMaximumIdleConnections && conn.getConnectionTypeCode() == expectedConnectionTypeCode) {
           state.accumulatedCheckoutTime += conn.getCheckoutTime();
+          /**
+           * 获取/归还连接都有类似这样的操作，为的是避免可能的死锁，refer https://stackoverflow.com/questions/16168055/what-is-the-effect-of-disabling-auto-commit-on-a-database-connection
+           */
           if (!conn.getRealConnection().getAutoCommit()) {
             conn.getRealConnection().rollback();
           }
