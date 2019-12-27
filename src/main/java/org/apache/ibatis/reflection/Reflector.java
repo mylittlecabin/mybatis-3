@@ -328,7 +328,7 @@ public class Reflector {
       }
     }
   }
-
+  //retrunType#methodName:paramType1,paramType2...
   private String getSignature(Method method) {
     StringBuilder sb = new StringBuilder();
     Class<?> returnType = method.getReturnType();
