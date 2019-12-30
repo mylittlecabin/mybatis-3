@@ -62,6 +62,11 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     return methodCache.computeIfAbsent(method, k -> new MapperMethod(mapperInterface, method, sqlSession.getConfiguration()));
   }
 
+  /**
+   *
+   * 采用jdk7 java.lang.invoke.MethodHandles
+   *
+   */
   private Object invokeDefaultMethod(Object proxy, Method method, Object[] args)
       throws Throwable {
     final Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class
@@ -79,6 +84,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
 
   /**
    * Backport of java.lang.reflect.Method#isDefault()
+   * jdk1.8才有default方法定义，为了兼容低版本，这里直接copy jdk8中判断default方法的逻辑；
    */
   private boolean isDefaultMethod(Method method) {
     return (method.getModifiers()
