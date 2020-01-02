@@ -51,7 +51,7 @@ public class ParamNameResolver {
 
   public ParamNameResolver(Configuration config, Method method) {
     final Class<?>[] paramTypes = method.getParameterTypes();
-    //第一个[]代表从0起始的参数位置索引，第二位置对应一个参数的注解数组；
+    //第一个[]代表从0起始的参数位置索引，第二位置对应一个参数的注解数组；参见：com.chinapex.java.basics.reflect.TestGetParameterAnnotations 【位于play-with-scala工程】
     final Annotation[][] paramAnnotations = method.getParameterAnnotations();
     final SortedMap<Integer, String> map = new TreeMap<>();
     int paramCount = paramAnnotations.length;
