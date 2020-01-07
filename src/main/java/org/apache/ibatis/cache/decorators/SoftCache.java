@@ -76,6 +76,7 @@ public class SoftCache implements Cache {
       } else {
         // See #586 (and #335) modifications need more than a read lock
         synchronized (hardLinksToAvoidGarbageCollection) {
+          //这里对值进行强引用
           hardLinksToAvoidGarbageCollection.addFirst(result);
           if (hardLinksToAvoidGarbageCollection.size() > numberOfHardLinks) {
             hardLinksToAvoidGarbageCollection.removeLast();
@@ -117,6 +118,7 @@ public class SoftCache implements Cache {
     private final Object key;
 
     SoftEntry(Object key, Object value, ReferenceQueue<Object> garbageCollectionQueue) {
+      //对值(value)进行软引用，值即是referent
       super(value, garbageCollectionQueue);
       this.key = key;
     }

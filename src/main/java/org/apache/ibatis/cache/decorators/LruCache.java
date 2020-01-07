@@ -48,9 +48,27 @@ public class LruCache implements Cache {
   }
 
   public void setSize(final int size) {
+    /**
+     * Copy from java.util.LinkedHashMap#LinkedHashMap(int, float, boolean)；
+     *
+     * Constructs an empty <tt>LinkedHashMap</tt> instance with the
+     * specified initial capacity, load factor and ordering mode.
+     *
+     * @param  initialCapacity the initial capacity
+     * @param  loadFactor      the load factor
+     * @param  accessOrder     the ordering mode - <tt>true</tt> for
+     *         access-order, <tt>false</tt> for insertion-order
+     * @throws IllegalArgumentException if the initial capacity is negative
+     *         or the load factor is nonpositive
+     *
+     *         这里利用LinkedHashMap实现LRU(Least Recently Used 最近最少使用，即要求查找最久未被使用的元素来进行淘汰);
+     *         accessOrder表示排序模式；true按照访问来排序，当访问发生后，被访问元素会成为新的tail；false按照put来设置顺序，当新增元素时，新的元素会成为新的tail；
+     *         另外参照这里LRU缓存淘汰策略的实现，可以设置accessOrder=false去实现FIFO缓存淘汰策略；
+     *
+     */
     keyMap = new LinkedHashMap<Object, Object>(size, .75F, true) {
       private static final long serialVersionUID = 4267176411845948333L;
-
+      //removeEldestEntry ,此方法用于判定在Map执行put/putAll方法后是否驱逐eldest元素
       @Override
       protected boolean removeEldestEntry(Map.Entry<Object, Object> eldest) {
         boolean tooBig = size() > size;
