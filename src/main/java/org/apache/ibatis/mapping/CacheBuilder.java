@@ -118,6 +118,7 @@ public class CacheBuilder {
   private Cache setStandardDecorators(Cache cache) {
     try {
       MetaObject metaCache = SystemMetaObject.forObject(cache);
+      //在LruCache中触发
       if (size != null && metaCache.hasSetter("size")) {
         metaCache.setValue("size", size);
       }

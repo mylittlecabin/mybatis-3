@@ -185,7 +185,7 @@ public class XMLMapperBuilder extends BaseBuilder {
       }
     }
   }
-
+  //通过namespace直接引用已定义存在的cache
   private void cacheRefElement(XNode context) {
     if (context != null) {
       configuration.addCacheRef(builderAssistant.getCurrentNamespace(), context.getStringAttribute("namespace"));
