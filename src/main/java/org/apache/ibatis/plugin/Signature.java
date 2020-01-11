@@ -22,6 +22,8 @@ import java.lang.annotation.Target;
 
 /**
  * @author Clinton Begin
+ *
+ *用于唯一标志需要被拦截的方法
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
