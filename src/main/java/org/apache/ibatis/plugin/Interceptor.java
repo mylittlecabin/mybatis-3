@@ -21,11 +21,20 @@ import java.util.Properties;
  * @author Clinton Begin
  */
 public interface Interceptor {
-
+  /**
+    * 执行插入的逻辑
+    *
+    */
   Object intercept(Invocation invocation) throws Throwable;
 
+  /**
+    *生成代理对象，将插件执行逻辑（也就是intercept操作）植入；默认实现采用 return Plugin.wrap(target, this); 即可
+    */
   Object plugin(Object target);
 
+  /**
+    *用于接收配置文件中配置的属性
+    */
   void setProperties(Properties properties);
 
 }
